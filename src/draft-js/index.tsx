@@ -1,5 +1,11 @@
 import * as React from "react";
 import { Editor, EditorState } from "draft-js";
+import styled from "styled-components";
+
+const EditorWrapper = styled.div`
+  border: 1px solid #ccc;
+  padding: 8px;
+`;
 
 const Draft = () => {
   const [editorState, setEditorState] = React.useState(
@@ -7,9 +13,9 @@ const Draft = () => {
   );
 
   return (
-    <div>
+    <EditorWrapper>
       <Editor editorState={editorState} onChange={setEditorState} />
-    </div>
+    </EditorWrapper>
   );
 };
 
