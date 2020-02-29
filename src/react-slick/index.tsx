@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const reactSlick = () => {
+const ReactSlick = () => {
   return (
     <div>
       <h2>React Slick</h2>
@@ -16,4 +16,4 @@ const reactSlick = () => {
   );
 };
 
-export default reactSlick;
+export default ReactSlick;
