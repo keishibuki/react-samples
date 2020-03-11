@@ -1,12 +1,8 @@
 {
-  "name": "react-ts",
+  "name": "samples",
   "version": "1.0.0",
-  "description": "React and TypeScript example starter project",
-  "keywords": [
-    "typescript",
-    "react",
-    "starter"
-  ],
+  "description": "",
+  "keywords": [],
   "main": "src/index.tsx",
   "dependencies": {
     "@types/draft-js": "0.10.38",
