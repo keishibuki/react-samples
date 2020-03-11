@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useTable } from "react-table";
 import styled from "styled-components";
+import { FixedSizeList } from "react-window";
 import makeData from "./makeData";
 
 const Table = styled.div`
@@ -30,25 +31,54 @@ const Th = styled.div`
 const Td = styled.div`
   display: inline-block;
   width: 200px;
+  height: 100%;
   box-sizing: border-box;
-  padding: 8px;
+  padding: 0 8px;
   border-right: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
+  white-space: nowrap;
+  overflow: hidden;
 `;
 
 const Index = () => {
-  const { getTableProps, headerGroups, rows, prepareRow } = useTable({
+  const {
+    getTableProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    totalColumnsWidth
+  } = useTable({
     columns: [
       { accessor: "firstName", Header: "First Name" },
       { accessor: "lastName", Header: "Last Name" },
       { accessor: "age", Header: "Age" }
     ],
-    data: makeData(300)
+    data: makeData(10000)
   });
 
+  const RenderRow = React.useCallback(
+    ({ index, style }) => {
+      const row = rows[index];
+      prepareRow(row);
+
+      return (
+        <Tr {...row.getRowProps({ style })}>
+          {row.cells.map(cell => {
+            return (
+              <Td {...cell.getCellProps()} className="td">
+                {cell.render("Cell")}
+              </Td>
+            );
+          })}
+        </Tr>
+      );
+    },
+    [prepareRow, rows]
+  );
+
   return (
-    <Table {...getTableProps()}>
-      <div className="thead">
+    <Table {...getTableProps()} style={{ width: totalColumnsWidth }}>
+      <div className="thead" style={{ width: totalColumnsWidth }}>
         {headerGroups.map(headerGroup => (
           <Tr {...headerGroup.getHeaderGroupProps()} className="tr">
             {headerGroup.headers.map(column => (
@@ -60,18 +90,14 @@ const Index = () => {
         ))}
       </div>
       <div className="tbody">
-        {rows.map(row => {
-          prepareRow(row);
-          return (
-            <Tr {...row.getRowProps()} className="tr">
-              {row.cells.map(cell => (
-                <Td className="td" {...cell.getCellProps()}>
-                  {cell.render("Cell")}
-                </Td>
-              ))}
-            </Tr>
-          );
-        })}
+        <FixedSizeList
+          height={420}
+          itemCount={rows.length}
+          itemSize={25}
+          width={totalColumnsWidth}
+        >
+          {RenderRow}
+        </FixedSizeList>
       </div>
     </Table>
   );
